@@ -20,7 +20,7 @@ public record TaskResponse(
             task.getDescription(),
             task.getStatus(),
             task.getCreatedAt(),
-            task.getUpdatedAt(),
+            task.getUpdatedAt()
         );
     }
 }
