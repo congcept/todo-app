@@ -1,11 +1,15 @@
 package com.todo.exception;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import java.net.URI;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,7 +28,7 @@ public class GlobalExceptionHandler {
             ex.getMessage()
         );
         pd.setTitle("Not found");
-        pd.SetType(URI.create("about:blank"));
+        pd.setType(URI.create("about:blank"));
         pd.setProperty("timestamp", Instant.now());
         pd.setProperty(
             "path",
@@ -41,6 +45,45 @@ public class GlobalExceptionHandler {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(
             HttpStatus.BAD_REQUEST,
             ex.getMessage()
+        );
+        pd.setTitle("Bad Request");
+        pd.setType(URI.create("about:blank"));
+        pd.setProperty("timestamp", Instant.now());
+        pd.setProperty(
+            "path",
+            request.getDescription(false).replace("uri=", "")
+        );
+        return pd;
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ProblemDetail handleHttpMessageNotReadable(
+        HttpMessageNotReadableException ex,
+        WebRequest request
+    ) {
+        String message = "Malformed request body";
+
+        Throwable cause = ex.getCause();
+        if (cause instanceof InvalidFormatException ife) {
+            if (ife.getTargetType() != null && ife.getTargetType().isEnum()) {
+                String validValues = Arrays.toString(
+                    ife.getTargetType().getEnumConstants()
+                );
+                message =
+                    "Invalid value '" +
+                    ife.getValue() +
+                    "' for field '" +
+                    ife.getPath().stream()
+                        .map(JsonMappingException.Reference::getFieldName)
+                        .collect(Collectors.joining(".")) +
+                    "'. Allowed: " +
+                    validValues;
+            }
+        }
+
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            message
         );
         pd.setTitle("Bad Request");
         pd.setType(URI.create("about:blank"));
