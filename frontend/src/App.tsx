@@ -28,9 +28,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-3xl mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold text-gray-900">Todo App</h1>
+      <header className="bg-white">
+        <div className="max-w-3xl mx-auto px-4 py-8">
+          <h1 className="text-4xl font-bold text-center text-gray-900 uppercase">Todo App</h1>
         </div>
       </header>
       <main className="max-w-3xl mx-auto px-4 py-6 space-y-4">
