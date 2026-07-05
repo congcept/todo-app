@@ -15,5 +15,6 @@ public interface TaskService {
     TaskResponse getTaskById(UUID id);
     TaskResponse createTask(TaskRequest request);
     TaskResponse updateTask(UUID id, TaskRequest request);
+    TaskResponse toggleStatus(UUID id);
     void deleteTask(UUID id);
 }

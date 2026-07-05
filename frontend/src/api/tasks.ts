@@ -35,6 +35,11 @@ export async function updateTask(id: string, data: TaskRequest): Promise<Task> {
   return res.data;
 }
 
+export async function toggleTaskStatus(id: string): Promise<Task> {
+  const res = await apiClient.patch<Task>(`/api/tasks/${id}/status`)
+  return res.data
+}
+
 export async function deleteTask(id: string): Promise<void> {
   await apiClient.delete(`/api/tasks/${id}`);
 }

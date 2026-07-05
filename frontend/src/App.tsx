@@ -38,7 +38,7 @@ export default function App() {
           <StatusFilter value={status} onChange={handleStatusChange} />
           <button
             onClick={() => setModal({ type: 'create' })}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer"
+            className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
           >
             + New Task
           </button>

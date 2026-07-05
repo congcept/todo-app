@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,6 +57,11 @@ public class TaskController {
     @ResponseStatus(HttpStatus.CREATED)
     public TaskResponse createTask(@Valid @RequestBody TaskRequest request) {
         return taskService.createTask(request);
+    }
+
+    @PatchMapping("/{id}/status")
+    public TaskResponse toggleStatus(@PathVariable UUID id) {
+        return taskService.toggleStatus(id);
     }
 
     @PutMapping("/{id}")

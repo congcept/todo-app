@@ -77,6 +77,20 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
+    public TaskResponse toggleStatus(UUID id) {
+        Task task = taskRepository
+            .findById(id)
+            .orElseThrow(() -> new TaskNotFoundException(id));
+        task.setStatus(
+            task.getStatus() == TaskStatus.PENDING
+                ? TaskStatus.COMPLETED
+                : TaskStatus.PENDING
+        );
+        return TaskResponse.from(taskRepository.save(task));
+    }
+
+    @Override
+    @Transactional
     public void deleteTask(UUID id) {
         if (!taskRepository.existsById(id)) {
             throw new TaskNotFoundException(id);
